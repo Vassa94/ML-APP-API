@@ -2,7 +2,7 @@ package com.example.OxiApi.Model;
 
 import javax.persistence.Id;
 
-public class publicacionWeb {
+public class PublicacionWeb {
 
     @Id
     private String identificador;
@@ -22,10 +22,10 @@ public class publicacionWeb {
     private String marca;
 
 
-    public publicacionWeb() {
+    public PublicacionWeb() {
     }
 
-    public publicacionWeb(String identificador, String nombre, String categoria, Long precio, Long precioProm, Float peso, Float alto, Float ancho, Float profundidad, Long stock, Long SKU, Boolean mostrar, Boolean envio, String tags, String marca) {
+    public PublicacionWeb(String identificador, String nombre, String categoria, Long precio, Long precioProm, Float peso, Float alto, Float ancho, Float profundidad, Long stock, Long SKU, Boolean mostrar, Boolean envio, String tags, String marca) {
         this.identificador = identificador;
         this.nombre = nombre;
         this.categoria = categoria;
