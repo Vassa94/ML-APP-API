@@ -36,6 +36,43 @@ public class PublicacionWebController {
 
     @PutMapping("web/editar/{id}")
     public PublicacionWeb editPubWeb (@PathVariable Long id,
-                                      @RequestParam String )
+                                      @RequestParam("identificador")String nuevoIdentificador,
+                                      @RequestParam("Nombre")String nuevoNombre,
+                                      @RequestParam("categoria")String nuevoCategoria,
+                                      @RequestParam("precio")Long nuevoPrecio,
+                                      @RequestParam("precioProm")Long nuevoPrecioProm,
+                                      @RequestParam("peso")Float nuevoPeso,
+                                      @RequestParam("alto")Float nuevoAlto,
+                                      @RequestParam("ancho")Float nuevoAncho,
+                                      @RequestParam("produndidad")Float nuevoProfundidad,
+                                      @RequestParam("stock")Long nuevoStock,
+                                      @RequestParam("SKU")Long nuevoSKU,
+                                      @RequestParam("mostrar")Boolean nuevoMostrar,
+                                      @RequestParam("envio")Boolean nuevoEnvio,
+                                      @RequestParam("tags")String nuevoTags,
+                                      @RequestParam("marca")String nuevoMarca){
+        PublicacionWeb publicacionWeb = interPublicacionWeb.findPublicacionWeb(id);
+
+        publicacionWeb.setIdentificador(nuevoIdentificador);
+        publicacionWeb.setNombre(nuevoNombre);
+        publicacionWeb.setCategoria(nuevoCategoria);
+        publicacionWeb.setPrecio(nuevoPrecio);
+        publicacionWeb.setPrecioProm(nuevoPrecioProm);
+        publicacionWeb.setPeso(nuevoPeso);
+        publicacionWeb.setAlto(nuevoAlto);
+        publicacionWeb.setAncho(nuevoAncho);
+        publicacionWeb.setProfundidad(nuevoProfundidad);
+        publicacionWeb.setStock(nuevoStock);
+        publicacionWeb.setSKU(nuevoSKU);
+        publicacionWeb.setMostrar(nuevoMostrar);
+        publicacionWeb.setEnvio(nuevoEnvio);
+        publicacionWeb.setTags(nuevoTags);
+        publicacionWeb.setMarca(nuevoMarca);
+
+        interPublicacionWeb.savePublicacionWeb(publicacionWeb);
+
+        return publicacionWeb;
+
+    }
 
 }

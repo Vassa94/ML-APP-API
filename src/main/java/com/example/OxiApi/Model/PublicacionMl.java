@@ -11,7 +11,7 @@ public class PublicacionMl {
     private Long variationId;
     private Long variationSku;
     private String titulo;
-    private String cantidad;
+    private Long cantidad;
     private Long precio;
     private String estado;
 
@@ -19,7 +19,7 @@ public class PublicacionMl {
     public PublicacionMl() {
     }
 
-    public PublicacionMl(String itemId, Long itemSku, Long variationId, Long variationSku, String titulo, String cantidad, Long precio, String estado) {
+    public PublicacionMl(String itemId, Long itemSku, Long variationId, Long variationSku, String titulo, Long cantidad, Long precio, String estado) {
         this.itemId = itemId;
         this.itemSku = itemSku;
         this.variationId = variationId;
@@ -70,11 +70,11 @@ public class PublicacionMl {
         this.titulo = titulo;
     }
 
-    public String getCantidad() {
+    public Long getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(Long cantidad) {
         this.cantidad = cantidad;
     }
 
