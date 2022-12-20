@@ -6,6 +6,7 @@ import com.example.OxiApi.Service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.constant.Constable;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -21,10 +22,23 @@ public class ProductoController {
     @GetMapping("/producto/traer")
     public List<Producto> getProductos() {return interProducto.getProductos(); }
 
-    @PostMapping("productos/crear")
+    @GetMapping("/")
+    public Constable status(){
+        String cartel = "API Funcionando Correctamente ";
+        return cartel;}
+
+    @PostMapping("producto/crear")
     public String createProducto (@RequestBody Producto producto){
         interProducto.saveProducto(producto);
         return "El producto fue creado exitosamente";
+    }
+
+    @PostMapping("productos/crear")
+    public String createProducto (@RequestBody Producto[] productos){
+        for (Producto producto : productos) {
+            interProducto.saveProducto(producto);
+        }
+        return "Los productos fueron creados exitosamente";
     }
 
     /**Elimina un producto de la base de datos.*/
