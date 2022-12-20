@@ -5,6 +5,7 @@ import com.example.OxiApi.Model.Producto;
 import com.example.OxiApi.Service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.constant.Constable;
 import java.util.List;
@@ -23,17 +24,19 @@ public class ProductoController {
     public List<Producto> getProductos() {return interProducto.getProductos(); }
 
     @GetMapping("/")
-    public Constable status(){
-        String cartel = "API Funcionando Correctamente ";
-        return cartel;}
+    public ModelAndView status(){
+        ModelAndView mav = new ModelAndView("apiGuide");
 
-    @PostMapping("producto/crear")
+        return mav;
+    }
+
+    @PostMapping("productos/crear")
     public String createProducto (@RequestBody Producto producto){
         interProducto.saveProducto(producto);
         return "El producto fue creado exitosamente";
     }
 
-    @PostMapping("productos/crear")
+    @PostMapping("productos/batch")
     public String createProducto (@RequestBody Producto[] productos){
         for (Producto producto : productos) {
             interProducto.saveProducto(producto);
@@ -76,6 +79,26 @@ public class ProductoController {
 
         // Devolver el objeto producto.
         return producto;
+    }
+
+    @PutMapping ("productos/editarbatch")
+    @RequestMapping(value = "productos/editarbatch",method = {RequestMethod.GET, RequestMethod.PUT})
+    public List<Producto> editProducto(@PathVariable Long id, @RequestBody List<Producto> productos) {
+        // Encontrar el producto con el id que se pasa en la url.
+        Producto producto = interProducto.findProducto(id);
+
+        // Estableciendo los nuevos valores al objeto producto.
+        producto.setCod_Fabrica(productos.get(0).getCod_Fabrica());
+        producto.setDescripcion(productos.get(0).getDescripcion());
+        producto.setMarca(productos.get(0).getMarca());
+        producto.setPrecioPublico(productos.get(0).getPrecioPublico());
+        producto.setCosto(productos.get(0).getCosto());
+
+        // Guardando el objeto producto en la base de datos.
+        interProducto.saveProducto(producto);
+
+        // Devolver el objeto producto.
+        return productos;
     }
 
 
