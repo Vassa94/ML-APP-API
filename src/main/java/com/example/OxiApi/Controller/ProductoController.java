@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.lang.constant.Constable;
 import java.util.List;
+import java.util.concurrent.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
@@ -37,18 +37,33 @@ public class ProductoController {
     }
 
     @PostMapping("productos/batch")
+    public String createProducto(@RequestBody Producto[] productos) {
+        // Crear un objeto ExecutorService con un número de hilos igual al número de productos que se deben cargar.
+        ExecutorService executor = Executors.newFixedThreadPool(productos.length);
+        // Iterar sobre los productos y crear un hilo para cada uno.
+        for (Producto producto : productos) {
+            executor.submit(() -> interProducto.saveProducto(producto));
+        }
+        // Cerrar el ExecutorService.
+        executor.shutdown();
+        return "Los productos fueron creados exitosamente";
+    }
+
+
+    /*
+    @PostMapping("productos/batch")
     public String createProducto (@RequestBody Producto[] productos){
         for (Producto producto : productos) {
             interProducto.saveProducto(producto);
         }
         return "Los productos fueron creados exitosamente";
-    }
+    }*/
 
     /**Elimina un producto de la base de datos.*/
     @DeleteMapping("productos/borrar/{id}")
     public String deleteProducto(@PathVariable Long id){
         interProducto.deleteProducto(id);
-        return "El producto fue borrado correctamente";
+        return "El producto con codigo "+ id +" fue borrado correctamente";
     }
 
 
