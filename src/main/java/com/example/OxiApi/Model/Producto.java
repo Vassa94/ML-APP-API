@@ -16,18 +16,18 @@ import javax.persistence.*;
         private String descripcion;
         private String marca;
         private Long precioPublico;
-        private Long costo;
+        private Long stock;
 
         public Producto() {
         }
 
-        public Producto(Long codigo, String cod_Fabrica, String descripcion, String marca, Long precioPublico, Long costo) {
+        public Producto(Long codigo, String cod_Fabrica, String descripcion, String marca, Long precioPublico, Long stock) {
             this.codigo = codigo;
             this.cod_Fabrica = cod_Fabrica;
             this.descripcion = descripcion;
             this.marca = marca;
             this.precioPublico = precioPublico;
-            this.costo = costo;
+            this.stock = stock;
         }
 
 
@@ -71,11 +71,11 @@ import javax.persistence.*;
             this.precioPublico = precioPublico;
         }
 
-        public Long getCosto() {
-            return costo;
+        public Long getStock() {
+            return stock;
         }
 
-        public void setCosto(Long costo) {
-            this.costo = costo;
+        public void setStock(Long stock) {
+            this.stock = stock;
         }
     }
