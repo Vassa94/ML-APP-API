@@ -1,15 +1,20 @@
 package com.example.OxiApi.Controller;
 
 
+import com.example.OxiApi.Model.Precio;
 import com.example.OxiApi.Model.Producto;
+import com.example.OxiApi.Model.Stock;
 import com.example.OxiApi.Service.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
 
+import static java.lang.System.out;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
 
@@ -21,7 +26,18 @@ public class ProductoController {
     private IProductoService interProducto;
 
     @GetMapping("/producto/traer")
-    public List<Producto> getProductos() {return interProducto.getProductos(); }
+    public List<Producto> getProductos() {
+        List<Producto> productos = interProducto.getProductos();
+
+        // Ordenar la lista de productos por el campo "marca".
+        Collections.sort(productos, (p1, p2) -> p1.getMarca().compareTo(p2.getMarca()));
+
+        return productos;
+    }
+
+    /*
+    @GetMapping("/producto/traer")
+    public List<Producto> getProductos() {return interProducto.getProductos(); }*/
 
     @GetMapping("/")
     public ModelAndView status(){
@@ -37,27 +53,34 @@ public class ProductoController {
     }
 
     @PostMapping("productos/batch")
-    public String createProducto(@RequestBody Producto[] productos) {
-        // Crear un objeto ExecutorService con un número de hilos igual al número de productos que se deben cargar.
-        ExecutorService executor = Executors.newFixedThreadPool(productos.length);
-        // Iterar sobre los productos y crear un hilo para cada uno.
-        for (Producto producto : productos) {
-            executor.submit(() -> interProducto.saveProducto(producto));
+    public String createProductos(@RequestBody Producto[] productos) {
+        // Dividir el array de productos en varias partes.
+        int numPartes = (int) Math.ceil((double) productos.length / 5);
+        Producto[][] productosPartidos = new Producto[numPartes][];
+        for (int i = 0; i < numPartes; i++) {
+            int inicio = i * 5;
+            int fin = Math.min(inicio + 5, productos.length);
+            productosPartidos[i] = Arrays.copyOfRange(productos, inicio, fin);
         }
-        // Cerrar el ExecutorService.
+        // Crear un ExecutorService con un número fijo de 5 hilos.
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+        // Iterar sobre cada parte y crear un hilo para cada producto.
+        for (Producto[] parte : productosPartidos) {
+            for (Producto producto : parte) {
+                executor.submit(() -> interProducto.saveProducto(producto));
+            }
+        }
+        // Cerrar el ExecutorService y esperar a que se completen todos los hilos.
         executor.shutdown();
+        try {
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            // Manejar la excepción si es necesario.
+        }
+
         return "Los productos fueron creados exitosamente";
     }
 
-
-    /*
-    @PostMapping("productos/batch")
-    public String createProducto (@RequestBody Producto[] productos){
-        for (Producto producto : productos) {
-            interProducto.saveProducto(producto);
-        }
-        return "Los productos fueron creados exitosamente";
-    }*/
 
     /**Elimina un producto de la base de datos.*/
     @DeleteMapping("productos/borrar/{id}")
@@ -87,7 +110,7 @@ public class ProductoController {
         producto.setDescripcion(nuevaDescripcion);
         producto.setMarca(nuevaMarca);
         producto.setPrecioPublico(nuevoPrecioPub);
-        producto.setCosto(nuevoCosto);
+        producto.setStock(nuevoCosto);
 
         // Guardando el objeto producto en la base de datos.
         interProducto.saveProducto(producto);
@@ -96,26 +119,71 @@ public class ProductoController {
         return producto;
     }
 
-    @PutMapping ("productos/editarbatch")
-    @RequestMapping(value = "productos/editarbatch",method = {RequestMethod.GET, RequestMethod.PUT})
-    public List<Producto> editProducto(@PathVariable Long id, @RequestBody List<Producto> productos) {
-        // Encontrar el producto con el id que se pasa en la url.
-        Producto producto = interProducto.findProducto(id);
 
-        // Estableciendo los nuevos valores al objeto producto.
-        producto.setCod_Fabrica(productos.get(0).getCod_Fabrica());
-        producto.setDescripcion(productos.get(0).getDescripcion());
-        producto.setMarca(productos.get(0).getMarca());
-        producto.setPrecioPublico(productos.get(0).getPrecioPublico());
-        producto.setCosto(productos.get(0).getCosto());
 
-        // Guardando el objeto producto en la base de datos.
-        interProducto.saveProducto(producto);
+    @PutMapping ("productos/actualizar/stock")
+    @RequestMapping(value = "productos/actualizar/stock",method = {RequestMethod.GET, RequestMethod.PUT})
+    public String editProductosS(@RequestBody Stock[] stocks) {
+        // Crear un ExecutorService con un número fijo de 5 hilos.
+        ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        // Devolver el objeto producto.
-        return productos;
+        // Iterar sobre el array de stocks y crear un hilo para cada stock.
+        for (Stock stock : stocks) {
+            Long codigo = stock.getCodigo();
+            Long stockValue = stock.getStock();
+            executor.submit(() -> {
+                // Buscar el objeto Producto correspondiente.
+                Producto p = interProducto.findProducto(codigo);
+                if (p != null) {
+                    // Establecer el nuevo valor del campo "stock" del objeto Producto.
+                    p.setStock(Long.valueOf(stockValue));
+
+                    // Guardar el producto en la base de datos.
+                    interProducto.saveProducto(p);
+                }
+            });
+        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            // Manejar la excepción si es necesario.
+        }
+        out.println("Ya termine de procesar");
+        return "Los productos fueron actualizados exitosamente";
     }
 
+    @PutMapping ("productos/actualizar/precio")
+    @RequestMapping(value = "productos/actualizar/precio",method = {RequestMethod.GET, RequestMethod.PUT})
+    public String editProductosP(@RequestBody Precio[] precios) {
+        // Crear un ExecutorService con un número fijo de 5 hilos.
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+
+        // Iterar sobre el array de stocks y crear un hilo para cada stock.
+        for (Precio precio : precios) {
+            Long codigo = precio.getCodigo();
+            Long precioValue = precio.getPrecio();
+            executor.submit(() -> {
+                // Buscar el objeto Producto correspondiente.
+                Producto p = interProducto.findProducto(codigo);
+                if (p != null) {
+                    // Establecer el nuevo valor del campo "stock" del objeto Producto.
+                    p.setPrecioPublico(Long.valueOf(precioValue));
+
+                    // Guardar el producto en la base de datos.
+                    interProducto.saveProducto(p);
+                }
+            });
+        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            // Manejar la excepción si es necesario.
+        }
+        out.println("Ya termine de procesar");
+        return "Los productos fueron actualizados exitosamente";
+    }
 
 
 }
