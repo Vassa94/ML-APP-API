@@ -3,47 +3,26 @@
 
 
 
-<body>
-
-
-    <div id="maincontent">
-        <div id="outputFigDisplay" class="fig">
-            <pre id="taag_output_text" class="fig"
-                contenteditable="true">________         .__                                       .___                _________       _____           _____ __________.___
+<div id="maincontent">
+    <div id="outputFigDisplay" class="fig">
+<pre id="taag_output_text" class="fig" contenteditable="true">________         .__                                       .___                _________       _____           _____ __________.___
 \_____  \ ___  __|__| _____   ___________   ____  ____   __| _/____   ______  /   _____/      /  _  \         /  _  \\______   \   |
  /   |   \\  \/  /  |/     \_/ __ \_  __ \_/ ___\/ __ \ / __ |/ __ \ /  ___/  \_____  \      /  /_\  \       /  /_\  \|     ___/   |
 /    |    \&gt;    &lt;|  |  Y Y  \  ___/|  | \/\  \__\  ___// /_/ \  ___/ \___ \   /        \    /    |    \     /    |    \    |   |   |
-\_______  /__/\_ \__|__|_|  /\___  &gt;__|    \___  &gt;___  &gt;____ |\___  &gt;____  &gt; /_______  / /\ \____|__  / /\  \____|__  /____|   |___|
+\_______  /__/\_ \__|__|_|  /\___  &gt;__|    \___  &gt;___  &gt;____ |\___  &gt;____  &gt; /_______  / /\ \____|__  / /\  \____|__  /____|   |___|     Version: 1.0Alpha
         \/      \/        \/     \/            \/    \/     \/    \/     \/          \/  \/         \/  \/          \/              </pre>
-            <div>
-                <p>&nbsp;<strong>-</strong><strong> API FUNCIONANDO CORRECTAMENTE -</strong><strong><br /> <br />
-                    </strong><strong>Endpoints:</strong></p>
-                <p><strong>Productos</strong></p>
-                <p><em>POST "/productos/crear"</em>: Permite crear de a un producto a la vez<br />
-                    <em>GET "/productos/traer"</em>: Devuelve el total de productos en la BD<br />
-                    <em>POST "/productos/batch"</em>: Permite crear productos en base a un array<br />
-                    <em>DELETE "productos/borrar/{id}"</em>: Permite eliminar un producto indicando su ID<br />
-                    <em>PUT "productos/editar/{id}"</em>: Permite editar un productos indicando su ID</p>
-                <p><strong>Publicaciones Mercadolibre</strong></p>
-                <p><em>POST "/ml/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br />
-                    <em>GET "/ml/traer"</em>: Devuelve el total de publicaciones en la BD<br />
-                    <em>POST "/ml/batch"</em>: Permite crear publicaciones en base a un array<br />
-                    <em>DELETE "/ml/borrar/{id}"</em>: Permite eliminar una publicaci&oacute;n indicando su ID<br />
-                    <em>PUT "/ml/editar/{id}"</em>: Permite editar una publicaci&oacute;n indicando su ID</p>
-                <p><strong>Publicaciones pagina WEB</strong></p>
-                <p><em>POST "/web/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br />
-                    <em>GET "/web/traer"</em>: Devuelve el total de publicaciones en la BD<br />
-                    <em>POST "/web/batch"</em>: Permite crear publicaciones en base a un array<br />
-                    <em>DELETE "/web/borrar/{id}"</em>: Permite eliminar una publicaci&oacute;n indicando su ID<br />
-                    <em>PUT "/web/editar/{id}"</em>: Permite editar una publicaci&oacute;n indicando su ID</p>
-                <p>&nbsp;</p>
-                <p>Repositorio:&nbsp;<a href="https://github.com/Vassa94/ML-APP-API" target="_blank"
-                        rel="noopener">GitHub</a></p>
-            </div>
+        <div>
+            <p>&nbsp;<strong>-</strong><strong> API FUNCIONANDO CORRECTAMENTE -</strong><strong><br /><br /></strong><strong>Endpoints:</strong></p>
+            <p><strong>Productos</strong></p>
+            <p><em>GET "/productos/traer"</em>: Devuelve el total de productos en la BD<br /><em>POST "/productos/crear"</em>: Permite crear de a un producto a la vez<br /><em>POST "/productos/batch"</em>: Permite crear productos en base a un array<br /><em>DELETE "productos/borrar/{id}"</em>: Permite eliminar un producto indicando su ID<br /><em>PUT "productos/editar/{id}"</em>: Permite editar un productos indicando su ID<br /><em>PUT "productos/actualizar/stock"</em>: Permite actualizar los stock de todo<br /><em>PUT "productos/actualizar/precio"</em>: Permite actualizar los precios de todo</p>
+            <p><strong>Publicaciones Mercadolibre</strong></p>
+            <p><em>POST "/ml/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br /><em>GET "/ml/traer"</em>: Devuelve el total de publicaciones en la BD<br /><em>POST "/ml/batch"</em>: Permite crear publicaciones en base a un array<br /><em>DELETE "/ml/borrar/{id}"</em>: Permite eliminar una publicaci&oacute;n indicando su ID<br /><em>PUT "/ml/editar/{id}"</em>: Permite editar una publicaci&oacute;n indicando su ID</p>
+            <p><strong>Publicaciones pagina WEB</strong></p>
+            <p><em>POST "/web/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br /><em>GET "/web/traer"</em>: Devuelve el total de publicaciones en la BD<br /><em>POST "/web/batch"</em>: Permite crear publicaciones en base a un array<br /><em>DELETE "/web/borrar/{id}"</em>: Permite eliminar una publicaci&oacute;n indicando su ID<br /><em>PUT "/web/editar/{id}"</em>: Permite editar una publicaci&oacute;n indicando su ID</p>
+            <p>&nbsp;</p>
+            <p>Repositorio:&nbsp;<a href="https://github.com/Vassa94/ML-APP-API" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/Vassa94/ML-APP-API" target="_blank" rel="noopener"></a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<em>Dessarrollado por Ignacio Vassallo</em> </p>
         </div>
     </div>
-
-
-</body>
+</div>
 
 </html>

@@ -5,10 +5,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+
+
     @Getter
     @Setter
     @Entity
     public class Producto {
+
+
 
         @Id
         private Long codigo;
