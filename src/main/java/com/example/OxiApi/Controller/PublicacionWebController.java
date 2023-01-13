@@ -8,9 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import java.awt.print.Pageable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,16 +29,28 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.System.out;
+import static org.hibernate.cfg.AvailableSettings.URL;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
 
 
 @CrossOrigin(origins = "*", methods = {GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE})
 @RestController
+@EnableTransactionManagement
 public class PublicacionWebController {
 
     @Autowired
     private IPublicacionWebService interPublicacionWeb;
+    private EntityManager entityManager;
+    private EntityManagerFactory entityManagerFactory;
+    private static final String USERNAME = "usnf00rqy9vtk01v";
+    private static final String PASSWORD = "jYjcWkcypxgiljBamXkE";
+
+    public PublicacionWebController(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
+
+
 
     @GetMapping("web/traer")
     public List<PublicacionWeb> getPublicacionWeb() {return interPublicacionWeb.getPublicacionWeb();}
@@ -53,7 +74,7 @@ public class PublicacionWebController {
             publicacionWebPartidos[i] = Arrays.copyOfRange(publicacionWebs, inicio, fin);
         }
         // Crear un ExecutorService con un número fijo de 5 hilos.
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
         // Iterar sobre cada parte y crear un hilo para cada producto.
         for (PublicacionWeb[] parte : publicacionWebPartidos) {
             for (PublicacionWeb publicacion : parte) {
@@ -121,8 +142,9 @@ public class PublicacionWebController {
 
     @PutMapping ("web/actualizar/precio")
     @RequestMapping(value = "web/actualizar/precio",method = {RequestMethod.GET, RequestMethod.PUT})
-    public String editPubicacionP(@RequestBody Precio[] precios) {
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+    @Transactional
+    public String editPublicacion(@RequestBody Precio[] precios) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
         Map<Long, Long> preciosProductos = new HashMap<>();
         for (Precio precio : precios) {
             preciosProductos.put(precio.getCodigo(), precio.getPrecio());
@@ -137,7 +159,8 @@ public class PublicacionWebController {
                         precioAct += preciosProductos.getOrDefault(cod,0L);
                     }
                 }
-                publicacionWeb.setPrecio((precioAct+200));
+                Long pack = publicacionWeb.getPack();
+                publicacionWeb.setPrecio(((precioAct*pack)+200));
                 interPublicacionWeb.savePublicacionWeb(publicacionWeb);
             });
             }
@@ -145,12 +168,15 @@ public class PublicacionWebController {
         try {
             executor.awaitTermination(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            // Manejar la excepción si es necesario.
+            return "Error de procesamiento";
         }
 
         out.println("Ya termine de procesar");
         return "Los productos fueron actualizados exitosamente";
     }
+
+
+
 
 
 

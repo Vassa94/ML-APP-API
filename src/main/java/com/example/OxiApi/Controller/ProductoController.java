@@ -125,7 +125,7 @@ public class ProductoController {
     @RequestMapping(value = "productos/actualizar/stock",method = {RequestMethod.GET, RequestMethod.PUT})
     public String editProductosS(@RequestBody Stock[] stocks) {
         // Crear un ExecutorService con un número fijo de 5 hilos.
-        ExecutorService executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(4);
 
         // Iterar sobre el array de stocks y crear un hilo para cada stock.
         for (Stock stock : stocks) {
@@ -157,7 +157,7 @@ public class ProductoController {
     @RequestMapping(value = "productos/actualizar/precio",method = {RequestMethod.GET, RequestMethod.PUT})
     public String editProductosP(@RequestBody Precio[] precios) {
         // Crear un ExecutorService con un número fijo de 5 hilos.
-        ExecutorService executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(4);
 
         // Iterar sobre el array de stocks y crear un hilo para cada stock.
         for (Precio precio : precios) {
@@ -181,7 +181,7 @@ public class ProductoController {
         } catch (InterruptedException e) {
             // Manejar la excepción si es necesario.
         }
-        out.println("Ya termine de procesar");
+
         return "Los productos fueron actualizados exitosamente";
     }
 

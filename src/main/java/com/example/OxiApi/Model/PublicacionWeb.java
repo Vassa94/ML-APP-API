@@ -24,9 +24,11 @@ public class PublicacionWeb {
     private String valProp2;
     private String nomProp3;
     private String valProp3;
+    private Long pack;
     private Long precio;
     private Long precioProm;
     private Float peso;
+
     private Float alto;
     private Float ancho;
     private Float profundidad;
@@ -44,7 +46,7 @@ public class PublicacionWeb {
     public PublicacionWeb() {
     }
 
-    public PublicacionWeb(Long id, String URL, String nombre, String categorias, String nomProp1, String valProp1, String nomProp2, String valProp2, String nomProp3, String valProp3, Long precio, Long precioProm, Float peso, Float alto, Float ancho, Float profundidad, Long stock, List<Long> codigo, Long EAN, Boolean mostrar, Boolean envio, String tags, String marca) {
+    public PublicacionWeb(Long id, String URL, String nombre, String categorias, String nomProp1, String valProp1, String nomProp2, String valProp2, String nomProp3, String valProp3, Long pack, Long precio, Long precioProm, Float peso, Float alto, Float ancho, Float profundidad, Long stock, List<Long> codigo, Long EAN, Boolean mostrar, Boolean envio, String tags, String marca) {
         this.id = id;
         this.URL = URL;
         this.nombre = nombre;
@@ -55,6 +57,7 @@ public class PublicacionWeb {
         this.valProp2 = valProp2;
         this.nomProp3 = nomProp3;
         this.valProp3 = valProp3;
+        this.pack = pack;
         this.precio = precio;
         this.precioProm = precioProm;
         this.peso = peso;
@@ -149,7 +152,9 @@ public class PublicacionWeb {
     public void setValProp3(String valProp3) {
         this.valProp3 = valProp3;
     }
-
+    public Long getPack() {return pack;
+    }
+    public void setPack(Long pack) {this.pack = pack;}
     public Long getPrecio() {
         return precio;
     }
