@@ -3,6 +3,7 @@ package com.example.OxiApi.Controller;
 import com.example.OxiApi.Model.Precio;
 import com.example.OxiApi.Model.Producto;
 import com.example.OxiApi.Model.PublicacionWeb;
+import com.example.OxiApi.Model.Stock;
 import com.example.OxiApi.Service.IPublicacionWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,10 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -51,14 +49,14 @@ public class PublicacionWebController {
     }
 
 
-
     @GetMapping("web/traer")
-    public List<PublicacionWeb> getPublicacionWeb() {return interPublicacionWeb.getPublicacionWeb();}
-
+    public List<PublicacionWeb> getPublicacionWeb() {
+        return interPublicacionWeb.getPublicacionWeb();
+    }
 
 
     @PostMapping("web/crear")
-    public String createPubWeb (@RequestBody PublicacionWeb pubWeb){
+    public String createPubWeb(@RequestBody PublicacionWeb pubWeb) {
         interPublicacionWeb.savePublicacionWeb(pubWeb);
         return "La publicacion fue creada correctamente";
     }
@@ -93,29 +91,29 @@ public class PublicacionWebController {
     }
 
     @DeleteMapping("web/borrar/{id}")
-    @RequestMapping(value ="web/borrar/{id}", method = {RequestMethod.GET, RequestMethod.DELETE})
-    public  String deletePublicacionWeb(@PathVariable Long id) {
+    @RequestMapping(value = "web/borrar/{id}", method = {RequestMethod.GET, RequestMethod.DELETE})
+    public String deletePublicacionWeb(@PathVariable Long id) {
         interPublicacionWeb.deletePublicacionWeb(id);
         return "La Publicacion fue borrada correctamente";
     }
 
     @PutMapping("web/editar/{id}")
-    public PublicacionWeb editPubWeb (@PathVariable Long id,
-                                      @RequestParam("identificador")String nuevoIdentificador,
-                                      @RequestParam("Nombre")String nuevoNombre,
-                                      @RequestParam("categoria")String nuevoCategoria,
-                                      @RequestParam("precio")Long nuevoPrecio,
-                                      @RequestParam("precioProm")Long nuevoPrecioProm,
-                                      @RequestParam("peso")Float nuevoPeso,
-                                      @RequestParam("alto")Float nuevoAlto,
-                                      @RequestParam("ancho")Float nuevoAncho,
-                                      @RequestParam("produndidad")Float nuevoProfundidad,
-                                      @RequestParam("stock")Long nuevoStock,
-                                      @RequestParam("SKU") List<Long> nuevoSKU,
-                                      @RequestParam("mostrar")Boolean nuevoMostrar,
-                                      @RequestParam("envio")Boolean nuevoEnvio,
-                                      @RequestParam("tags")String nuevoTags,
-                                      @RequestParam("marca")String nuevoMarca){
+    public PublicacionWeb editPubWeb(@PathVariable Long id,
+                                     @RequestParam("identificador") String nuevoIdentificador,
+                                     @RequestParam("Nombre") String nuevoNombre,
+                                     @RequestParam("categoria") String nuevoCategoria,
+                                     @RequestParam("precio") Long nuevoPrecio,
+                                     @RequestParam("precioProm") Long nuevoPrecioProm,
+                                     @RequestParam("peso") Float nuevoPeso,
+                                     @RequestParam("alto") Float nuevoAlto,
+                                     @RequestParam("ancho") Float nuevoAncho,
+                                     @RequestParam("produndidad") Float nuevoProfundidad,
+                                     @RequestParam("stock") Long nuevoStock,
+                                     @RequestParam("SKU") List<Long> nuevoSKU,
+                                     @RequestParam("mostrar") Boolean nuevoMostrar,
+                                     @RequestParam("envio") Boolean nuevoEnvio,
+                                     @RequestParam("tags") String nuevoTags,
+                                     @RequestParam("marca") String nuevoMarca) {
         PublicacionWeb publicacionWeb = interPublicacionWeb.findPublicacionWeb(id);
 
         publicacionWeb.setURL(nuevoIdentificador);
@@ -140,8 +138,8 @@ public class PublicacionWebController {
 
     }
 
-    @PutMapping ("web/actualizar/precio")
-    @RequestMapping(value = "web/actualizar/precio",method = {RequestMethod.GET, RequestMethod.PUT})
+    @PutMapping("web/actualizar/precio")
+    @RequestMapping(value = "web/actualizar/precio", method = {RequestMethod.GET, RequestMethod.PUT})
     @Transactional
     public String editPublicacion(@RequestBody Precio[] precios) {
         ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -149,21 +147,21 @@ public class PublicacionWebController {
         for (Precio precio : precios) {
             preciosProductos.put(precio.getCodigo(), precio.getPrecio());
         }
-        List<PublicacionWeb> publicacionWebs =  getPublicacionWeb();
+        List<PublicacionWeb> publicacionWebs = getPublicacionWeb();
         for (PublicacionWeb publicacionWeb : publicacionWebs) {
             executor.submit(() -> {
                 Long precioAct = 0L;
                 List<Long> cods = publicacionWeb.getCodigo();
                 for (Long cod : cods) {
                     if (preciosProductos.get(cod) != null) {
-                        precioAct += preciosProductos.getOrDefault(cod,0L);
+                        precioAct += preciosProductos.getOrDefault(cod, 0L);
                     }
                 }
                 Long pack = publicacionWeb.getPack();
-                publicacionWeb.setPrecio(((precioAct*pack)+200));
+                publicacionWeb.setPrecio(((precioAct * pack) + 200));
                 interPublicacionWeb.savePublicacionWeb(publicacionWeb);
             });
-            }
+        }
         executor.shutdown();
         try {
             executor.awaitTermination(1, TimeUnit.MINUTES);
@@ -171,14 +169,40 @@ public class PublicacionWebController {
             return "Error de procesamiento";
         }
 
-        out.println("Ya termine de procesar");
         return "Los productos fueron actualizados exitosamente";
     }
 
+    @PutMapping("web/actualizar/batch")
+    @Transactional
+    public String editarPublicacionesWeb(@RequestBody List<PublicacionWeb> publicacionesWeb) {
 
+        for (PublicacionWeb publicacionWeb : publicacionesWeb) {
+            PublicacionWeb publicacionExistente = interPublicacionWeb.findPublicacionWeb(publicacionWeb.getId());
 
+            if (publicacionExistente != null) {
+                publicacionExistente.setURL(publicacionWeb.getURL());
+                publicacionExistente.setNombre(publicacionWeb.getNombre());
+                publicacionExistente.setCategorias(publicacionWeb.getCategorias());
+                publicacionExistente.setPrecio(publicacionWeb.getPrecio());
+                publicacionExistente.setPrecioProm(publicacionWeb.getPrecioProm());
+                publicacionExistente.setPeso(publicacionWeb.getPeso());
+                publicacionExistente.setAlto(publicacionWeb.getAlto());
+                publicacionExistente.setAncho(publicacionWeb.getAncho());
+                publicacionExistente.setProfundidad(publicacionWeb.getProfundidad());
+                publicacionExistente.setStock(publicacionWeb.getStock());
+                publicacionExistente.setCodigo(publicacionWeb.getCodigo());
+                publicacionExistente.setMostrar(publicacionWeb.getMostrar());
+                publicacionExistente.setEnvio(publicacionWeb.getEnvio());
+                publicacionExistente.setTags(publicacionWeb.getTags());
+                publicacionExistente.setMarca(publicacionWeb.getMarca());
+                interPublicacionWeb.savePublicacionWeb(publicacionExistente);
+            } else {
+                interPublicacionWeb.savePublicacionWeb(publicacionWeb);
+            }
+        }
 
-
+        return "Publicaciones actualizadas exitosamente";
+    }
 
 
 }

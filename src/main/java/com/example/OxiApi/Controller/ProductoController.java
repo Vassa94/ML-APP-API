@@ -100,7 +100,7 @@ public class ProductoController {
                                   @RequestParam("descripcion")String nuevaDescripcion,
                                   @RequestParam("marca")String nuevaMarca,
                                   @RequestParam("precioPub")Long nuevoPrecioPub,
-                                  @RequestParam("costo")Long nuevoCosto){
+                                  @RequestParam("stock")Long nuevoStock){
 
         // Encontrar el producto con el id que se pasa en la url.
         Producto producto=interProducto.findProducto(id);
@@ -110,11 +110,10 @@ public class ProductoController {
         producto.setDescripcion(nuevaDescripcion);
         producto.setMarca(nuevaMarca);
         producto.setPrecioPublico(nuevoPrecioPub);
-        producto.setStock(nuevoCosto);
+        producto.setStock(nuevoStock);
 
         // Guardando el objeto producto en la base de datos.
         interProducto.saveProducto(producto);
-
         // Devolver el objeto producto.
         return producto;
     }
