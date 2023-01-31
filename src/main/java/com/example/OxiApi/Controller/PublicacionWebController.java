@@ -98,27 +98,30 @@ public class PublicacionWebController {
     }
 
     @PutMapping("web/editar/{id}")
+    @RequestMapping(value = "web/editar/{id}", method = {RequestMethod.GET, RequestMethod.PUT})
     public PublicacionWeb editPubWeb(@PathVariable Long id,
                                      @RequestParam("identificador") String nuevoIdentificador,
-                                     @RequestParam("Nombre") String nuevoNombre,
+                                     @RequestParam("nombre") String nuevoNombre,
                                      @RequestParam("categoria") String nuevoCategoria,
+                                     @RequestParam("pack") Long nuevoPack,
                                      @RequestParam("precio") Long nuevoPrecio,
                                      @RequestParam("precioProm") Long nuevoPrecioProm,
                                      @RequestParam("peso") Float nuevoPeso,
                                      @RequestParam("alto") Float nuevoAlto,
                                      @RequestParam("ancho") Float nuevoAncho,
-                                     @RequestParam("produndidad") Float nuevoProfundidad,
+                                     @RequestParam("profundidad") Float nuevoProfundidad,
                                      @RequestParam("stock") Long nuevoStock,
                                      @RequestParam("SKU") List<Long> nuevoSKU,
                                      @RequestParam("mostrar") Boolean nuevoMostrar,
                                      @RequestParam("envio") Boolean nuevoEnvio,
-                                     @RequestParam("tags") String nuevoTags,
+                                     @RequestParam("ean") Long nuevoEan,
                                      @RequestParam("marca") String nuevoMarca) {
         PublicacionWeb publicacionWeb = interPublicacionWeb.findPublicacionWeb(id);
 
         publicacionWeb.setURL(nuevoIdentificador);
         publicacionWeb.setNombre(nuevoNombre);
         publicacionWeb.setCategorias(nuevoCategoria);
+        publicacionWeb.setPack(nuevoPack);
         publicacionWeb.setPrecio(nuevoPrecio);
         publicacionWeb.setPrecioProm(nuevoPrecioProm);
         publicacionWeb.setPeso(nuevoPeso);
@@ -129,7 +132,7 @@ public class PublicacionWebController {
         publicacionWeb.setCodigo(nuevoSKU);
         publicacionWeb.setMostrar(nuevoMostrar);
         publicacionWeb.setEnvio(nuevoEnvio);
-        publicacionWeb.setTags(nuevoTags);
+        publicacionWeb.setEAN(nuevoEan);
         publicacionWeb.setMarca(nuevoMarca);
 
         interPublicacionWeb.savePublicacionWeb(publicacionWeb);
@@ -149,18 +152,20 @@ public class PublicacionWebController {
         }
         List<PublicacionWeb> publicacionWebs = getPublicacionWeb();
         for (PublicacionWeb publicacionWeb : publicacionWebs) {
-            executor.submit(() -> {
-                Long precioAct = 0L;
-                List<Long> cods = publicacionWeb.getCodigo();
-                for (Long cod : cods) {
-                    if (preciosProductos.get(cod) != null) {
-                        precioAct += preciosProductos.getOrDefault(cod, 0L);
+            if (publicacionWeb.getPrecioProm() != null) {
+                executor.submit(() -> {
+                    Long precioAct = 0L;
+                    List<Long> cods = publicacionWeb.getCodigo();
+                    for (Long cod : cods) {
+                        if (preciosProductos.get(cod) != null) {
+                            precioAct += preciosProductos.getOrDefault(cod, 0L);
+                        }
                     }
-                }
-                Long pack = publicacionWeb.getPack();
-                publicacionWeb.setPrecio(((precioAct * pack) + 200));
-                interPublicacionWeb.savePublicacionWeb(publicacionWeb);
-            });
+                    Long pack = publicacionWeb.getPack();
+                    publicacionWeb.setPrecio(((precioAct * pack) + 200));
+                    interPublicacionWeb.savePublicacionWeb(publicacionWeb);
+                });
+            }
         }
         executor.shutdown();
         try {
@@ -183,6 +188,7 @@ public class PublicacionWebController {
                 publicacionExistente.setURL(publicacionWeb.getURL());
                 publicacionExistente.setNombre(publicacionWeb.getNombre());
                 publicacionExistente.setCategorias(publicacionWeb.getCategorias());
+                publicacionExistente.setPack(publicacionWeb.getPack());
                 publicacionExistente.setPrecio(publicacionWeb.getPrecio());
                 publicacionExistente.setPrecioProm(publicacionWeb.getPrecioProm());
                 publicacionExistente.setPeso(publicacionWeb.getPeso());
