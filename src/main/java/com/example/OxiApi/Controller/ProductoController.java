@@ -40,14 +40,14 @@ public class ProductoController {
     public List<Producto> getProductos() {return interProducto.getProductos(); }*/
 
     @GetMapping("/")
-    public ModelAndView status(){
+    public ModelAndView status() {
         ModelAndView mav = new ModelAndView("apiGuide");
 
         return mav;
     }
 
     @PostMapping("productos/crear")
-    public String createProducto (@RequestBody Producto producto){
+    public String createProducto(@RequestBody Producto producto) {
         interProducto.saveProducto(producto);
         return "El producto fue creado exitosamente";
     }
@@ -82,28 +82,30 @@ public class ProductoController {
     }
 
 
-    /**Elimina un producto de la base de datos.*/
+    /**
+     * Elimina un producto de la base de datos.
+     */
     @DeleteMapping("productos/borrar/{id}")
-    public String deleteProducto(@PathVariable Long id){
+    public String deleteProducto(@PathVariable Long id) {
         interProducto.deleteProducto(id);
-        return "El producto con codigo "+ id +" fue borrado correctamente";
+        return "El producto con codigo " + id + " fue borrado correctamente";
     }
 
 
-     // Esta función recibe la identificación de un producto y los nuevos valores para los atributos del producto, y luego
-     // actualiza el producto en la base de datos con los nuevos valores.
+    // Esta función recibe la identificación de un producto y los nuevos valores para los atributos del producto, y luego
+    // actualiza el producto en la base de datos con los nuevos valores.
 
-    @PutMapping ("productos/editar/{id}")
-    @RequestMapping(value = "productos/editar/{id}",method = {RequestMethod.GET, RequestMethod.PUT})
-    public Producto editProducto (@PathVariable Long id,
-                                  @RequestParam("codFabrica")String nuevoCodFabrica,
-                                  @RequestParam("descripcion")String nuevaDescripcion,
-                                  @RequestParam("marca")String nuevaMarca,
-                                  @RequestParam("precioPub")Long nuevoPrecioPub,
-                                  @RequestParam("stock")Long nuevoStock){
+    @PutMapping("productos/editar/{id}")
+    @RequestMapping(value = "productos/editar/{id}", method = {RequestMethod.GET, RequestMethod.PUT})
+    public Producto editProducto(@PathVariable Long id,
+                                 @RequestParam("codFabrica") String nuevoCodFabrica,
+                                 @RequestParam("descripcion") String nuevaDescripcion,
+                                 @RequestParam("marca") String nuevaMarca,
+                                 @RequestParam("precioPub") Long nuevoPrecioPub,
+                                 @RequestParam("stock") Long nuevoStock) {
 
         // Encontrar el producto con el id que se pasa en la url.
-        Producto producto=interProducto.findProducto(id);
+        Producto producto = interProducto.findProducto(id);
 
         // Estableciendo los nuevos valores al objeto producto.
         producto.setCod_Fabrica(nuevoCodFabrica);
@@ -119,9 +121,8 @@ public class ProductoController {
     }
 
 
-
-    @PutMapping ("productos/actualizar/stock")
-    @RequestMapping(value = "productos/actualizar/stock",method = {RequestMethod.GET, RequestMethod.PUT})
+    @PutMapping("productos/actualizar/stock")
+    @RequestMapping(value = "productos/actualizar/stock", method = {RequestMethod.GET, RequestMethod.PUT})
     public String editProductosS(@RequestBody Stock[] stocks) {
         // Crear un ExecutorService con un número fijo de 5 hilos.
         ExecutorService executor = Executors.newFixedThreadPool(4);
@@ -152,8 +153,8 @@ public class ProductoController {
         return "Los productos fueron actualizados exitosamente";
     }
 
-    @PutMapping ("productos/actualizar/precio")
-    @RequestMapping(value = "productos/actualizar/precio",method = {RequestMethod.GET, RequestMethod.PUT})
+    @PutMapping("productos/actualizar/precio")
+    @RequestMapping(value = "productos/actualizar/precio", method = {RequestMethod.GET, RequestMethod.PUT})
     public String editProductosP(@RequestBody Precio[] precios) {
         // Crear un ExecutorService con un número fijo de 5 hilos.
         ExecutorService executor = Executors.newFixedThreadPool(4);
