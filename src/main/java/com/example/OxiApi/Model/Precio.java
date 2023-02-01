@@ -11,16 +11,9 @@ public class Precio {
         return codigo;
     }
 
-    public void setCodigo(Long codigo) {
-        this.codigo = codigo;
-    }
-
     public Long getPrecio() {
         return precio;
     }
 
-    public void setStock(Long precio) {
-        this.precio = precio;
-    }
-}
 
+}
