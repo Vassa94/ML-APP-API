@@ -13,7 +13,7 @@ public class PublicacionWeb {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "publicacionesWeb")
-    @SequenceGenerator(name="publicacionesWeb", sequenceName = "id", allocationSize=1)
+    @SequenceGenerator(name = "publicacionesWeb", sequenceName = "id", allocationSize = 1)
     private Long id;
     private String URL;
     private String nombre;
@@ -28,15 +28,14 @@ public class PublicacionWeb {
     private Long precio;
     private Long precioProm;
     private Float peso;
-
     private Float alto;
     private Float ancho;
     private Float profundidad;
     private Long stock;
     @Column
-    @ElementCollection(targetClass=Long.class)
+    @ElementCollection(targetClass = Long.class)
     private List<Long> codigo;
-    private Long EAN;
+    private String EAN;
     private Boolean mostrar;
     private Boolean envio;
     private String tags;
@@ -46,7 +45,7 @@ public class PublicacionWeb {
     public PublicacionWeb() {
     }
 
-    public PublicacionWeb(Long id, String URL, String nombre, String categorias, String nomProp1, String valProp1, String nomProp2, String valProp2, String nomProp3, String valProp3, Long pack, Long precio, Long precioProm, Float peso, Float alto, Float ancho, Float profundidad, Long stock, List<Long> codigo, Long EAN, Boolean mostrar, Boolean envio, String tags, String marca) {
+    public PublicacionWeb(Long id, String URL, String nombre, String categorias, String nomProp1, String valProp1, String nomProp2, String valProp2, String nomProp3, String valProp3, Long pack, Long precio, Long precioProm, Float peso, Float alto, Float ancho, Float profundidad, Long stock, List<Long> codigo, String EAN, Boolean mostrar, Boolean envio, String tags, String marca) {
         this.id = id;
         this.URL = URL;
         this.nombre = nombre;
@@ -152,9 +151,15 @@ public class PublicacionWeb {
     public void setValProp3(String valProp3) {
         this.valProp3 = valProp3;
     }
-    public Long getPack() {return pack;
+
+    public Long getPack() {
+        return pack;
     }
-    public void setPack(Long pack) {this.pack = pack;}
+
+    public void setPack(Long pack) {
+        this.pack = pack;
+    }
+
     public Long getPrecio() {
         return precio;
     }
@@ -219,11 +224,11 @@ public class PublicacionWeb {
         this.codigo = codigo;
     }
 
-    public Long getEAN() {
+    public String getEAN() {
         return EAN;
     }
 
-    public void setEAN(Long EAN) {
+    public void setEAN(String EAN) {
         this.EAN = EAN;
     }
 
