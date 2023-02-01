@@ -1,33 +1,21 @@
 package com.example.OxiApi.Controller;
 
 import com.example.OxiApi.Model.Precio;
-import com.example.OxiApi.Model.Producto;
 import com.example.OxiApi.Model.PublicacionWeb;
 import com.example.OxiApi.Model.Stock;
 import com.example.OxiApi.Service.IPublicacionWebService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import java.awt.print.Pageable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.System.out;
-import static org.hibernate.cfg.AvailableSettings.URL;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.springframework.web.bind.annotation.RequestMethod.TRACE;
 
@@ -114,7 +102,7 @@ public class PublicacionWebController {
                                      @RequestParam("SKU") List<Long> nuevoSKU,
                                      @RequestParam("mostrar") Boolean nuevoMostrar,
                                      @RequestParam("envio") Boolean nuevoEnvio,
-                                     @RequestParam("ean") Long nuevoEan,
+                                     @RequestParam("ean") String nuevoEan,
                                      @RequestParam("marca") String nuevoMarca) {
         PublicacionWeb publicacionWeb = interPublicacionWeb.findPublicacionWeb(id);
 
@@ -174,6 +162,33 @@ public class PublicacionWebController {
             return "Error de procesamiento";
         }
 
+        return "Los productos fueron actualizados exitosamente";
+    }
+
+    @PutMapping("web/actualizar/stock")
+    @RequestMapping(value = "web/actualizar/stock", method = {RequestMethod.GET, RequestMethod.PUT})
+    @Transactional
+    public String editPublicacionS(@RequestBody Stock[] stocks) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        for (Stock stock : stocks) {
+            Long id = stock.getCodigo();
+            Long cant = stock.getStock();
+            executor.submit(() -> {
+                PublicacionWeb p = interPublicacionWeb.findPublicacionWeb(id);
+                if (p != null) {
+                    System.out.println(p);
+                    p.setStock(cant);
+                    interPublicacionWeb.savePublicacionWeb(p);
+                }
+            });
+        }
+        executor.shutdown();
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            return "Error de procesamiento";
+        }
         return "Los productos fueron actualizados exitosamente";
     }
 
