@@ -140,20 +140,18 @@ public class PublicacionWebController {
         }
         List<PublicacionWeb> publicacionWebs = getPublicacionWeb();
         for (PublicacionWeb publicacionWeb : publicacionWebs) {
-            if (publicacionWeb.getPrecioProm() != null) {
-                executor.submit(() -> {
-                    Long precioAct = 0L;
-                    List<Long> cods = publicacionWeb.getCodigo();
-                    for (Long cod : cods) {
-                        if (preciosProductos.get(cod) != null) {
-                            precioAct += preciosProductos.getOrDefault(cod, 0L);
-                        }
+            executor.submit(() -> {
+                Long precioAct = 0L;
+                List<Long> cods = publicacionWeb.getCodigo();
+                for (Long cod : cods) {
+                    if (preciosProductos.get(cod) != null) {
+                        precioAct += preciosProductos.getOrDefault(cod, 0L);
                     }
-                    Long pack = publicacionWeb.getPack();
-                    publicacionWeb.setPrecio(((precioAct * pack) + 200));
-                    interPublicacionWeb.savePublicacionWeb(publicacionWeb);
-                });
-            }
+                }
+                Long pack = publicacionWeb.getPack();
+                publicacionWeb.setPrecio(((precioAct * pack) + 200));
+                interPublicacionWeb.savePublicacionWeb(publicacionWeb);
+            });
         }
         executor.shutdown();
         try {
