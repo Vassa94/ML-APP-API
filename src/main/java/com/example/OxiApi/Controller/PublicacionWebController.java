@@ -149,7 +149,7 @@ public class PublicacionWebController {
                     }
                 }
                 Long pack = publicacionWeb.getPack();
-                publicacionWeb.setPrecio(((precioAct * pack) + 200));
+                publicacionWeb.setPrecio((precioAct * pack));
                 interPublicacionWeb.savePublicacionWeb(publicacionWeb);
             });
         }
