@@ -1,28 +1,175 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<head>
+    <meta charset="UTF-8">
+    <title>API guide</title>
+    <style>
+        #taag_output_text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        a {
+            color: aquamarine;
+        }
+
+        a:hover {
+            transform: scale(0.5);
+        }
+
+
+        body {
+            background-color: black;
+            color: #f2f2f2;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="maincontent">
+    <div id="outputFigDisplay" class="fig">
+            <pre id="taag_output_text" class="fig" contenteditable="true"><b>
+________         .__                                       .___                _________       _____           _____ __________.___
+\_____  \ ___  __|__| _____   ___________   ____  ____   __| _/____   ______  /   _____/      /  _  \         /  _  \\______   \   |
+ /   |   \\  \/  /  |/     \_/ __ \_  __ \_/ ___\/ __ \ / __ |/ __ \ /  ___/  \_____  \      /  /_\  \       /  /_\  \|     ___/   |
+/    |    \&gt;    &lt;|  |  Y Y  \  ___/|  | \/\  \__\  ___// /_/ \  ___/ \___ \   /        \    /    |    \     /    |    \    |   |   |
+\_______  /__/\_ \__|__|_|  /\___  &gt;__|    \___  &gt;___  &gt;____ |\___  &gt;____  &gt; /_______  / /\ \____|__  / /\  \____|__  /____|   |___|     Version: 1.2
+        \/      \/        \/     \/            \/    \/     \/    \/     \/          \/  \/         \/  \/          \/
+    </b></pre>
+        <div>
+            <p>
+                <strong>API FUNCIONANDO CORRECTAMENTE</strong>
+                <br><br>
+                <strong>Endpoints:</strong>
+            </p>
+            <p><strong>Productos</strong></p>
+            <ul>
+                <li><em>GET "/productos/traer"</em>: devuelve el total de productos en la base de datos</li>
+                <li><em>POST "/productos/crear"</em>: permite crear un producto a la vez</li>
+                <li><em>POST "/productos/batch"</em>: permite crear productos en base a un array</li>
+                <li><em>DELETE "productos/borrar/{id}"</em>: permite eliminar un producto indicando su ID</li>
+                <li><em>PUT "productos/editar/{id}"</em>: permite editar un producto indicando su ID</li>
+                <li><em>PUT "productos/actualizar/stock"</em>: permite actualizar el stock de todos los productos</li>
+                <li><em>PUT "productos/actualizar/precio"</em>: permite actualizar los precios de todos los productos
+                </li>
+            </ul>
+            <p><strong>Publicaciones Mercadolibre</strong></p>
+            <ul>
+                <li><em>POST "/ml/crear"</em>: permite crear una publicación a la vez</li>
+                <li><em>GET "/ml/traer"</em>: devuelve el total de publicaciones en la base de datos</li>
+                <li><em>POST "/web/estructura"</em>: Devuelve un array con la estructura del modelo de ML</li>
+                <li><em>DELETE "/ml/borrar/{id}"</em>: permite eliminar una publicación indicando su ID</li>
+                <li><em>PUT "/ml/editar/{id}"</em>: permite editar una publicación indicando su ID</li>
+                <li><em>PUT "/ml/editarParcial/{id}"</em>: Permite editar parcialmente una publicación. Autodetecta
+                    campos
+                </li>
+            </ul>
+            <p><strong>Publicaciones página web</strong></p>
+            <ul>
+                <li><em>POST "/web/crear"</em>: permite crear una publicación a la vez</li>
+                <li><em>GET "/web/traer"</em>: devuelve el total de publicaciones en la base de datos</li>
+                <li><em>POST "/web/batch"</em>: permite crear publicaciones en base a un array</li>
+                <li><em>DELETE "/web/borrar/{id}"</em>: permite eliminar una publicación indicando su ID</li>
+                <li><em>PUT "/web/editar/{id}"</em>: permite editar una publicación indicando su ID</li>
+                <li><em>PUT "web/actualizar/stock"</em>: Toma un body y actualiza el stock de las publicaciones en
+                    consecuencia
+                </li>
+                <li><em>PUT "web/actualizar/precio"</em>: Toma un body y actualiza el precio de las publicaciones en
+                    consecuencia
+                </li>
+                <li><em>PUT "web/actualizar/batch"</em>: Toma un body y actualiza todas las publicaciones en
+                    consecuencia
+                </li>
+            </ul>
+            <p><strong>Reputación</strong></p>
+            <ul>
+                <li><em>GET "reputacion/datos"</em>: Trae todos los datos de reputación</li>
+                <li><em>PUT "reputacion/editar"</em>: Permite editar los primeros tres valores del objeto principal</li>
+                <li><em>POST "reputacion/reclamos"</em>: Toma un array y sobrescribe el array de reclamos en el objeto
+                    principal
+                </li>
+                <li><em>POST "reputacion/mediaciones"</em>: Toma un array y sobrescribe el array de mediaciones en el
+                    objeto principal
+                </li>
+                <li><em>POST "reputacion/cancelaciones"</em>: Toma un array y sobrescribe el array de cancelaciones en
+                    el objeto principal
+                </li>
+                <li><em>POST "reputacion/demoras"</em>: Toma un array y sobrescribe el array de demoras en el objeto
+                    principal
+                </li>
+            </ul>
+
+
+            <div class="footer">
+                <p>Repositorio: <a href="https://github.com/Vassa94/ML-APP-API" target="_blank">GitHub</a></p>
+                <p>Desarrollado por Ignacio Vassallo</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 
 <div id="maincontent">
     <div id="outputFigDisplay" class="fig">
-<pre id="taag_output_text" class="fig" contenteditable="true">________         .__                                       .___                _________       _____           _____ __________.___
+        <pre id="taag_output_text" class="fig"
+            contenteditable="true">________         .__                                       .___                _________       _____           _____ __________.___
 \_____  \ ___  __|__| _____   ___________   ____  ____   __| _/____   ______  /   _____/      /  _  \         /  _  \\______   \   |
  /   |   \\  \/  /  |/     \_/ __ \_  __ \_/ ___\/ __ \ / __ |/ __ \ /  ___/  \_____  \      /  /_\  \       /  /_\  \|     ___/   |
 /    |    \&gt;    &lt;|  |  Y Y  \  ___/|  | \/\  \__\  ___// /_/ \  ___/ \___ \   /        \    /    |    \     /    |    \    |   |   |
-\_______  /__/\_ \__|__|_|  /\___  &gt;__|    \___  &gt;___  &gt;____ |\___  &gt;____  &gt; /_______  / /\ \____|__  / /\  \____|__  /____|   |___|     Version: 1.0Alpha
+\_______  /__/\_ \__|__|_|  /\___  &gt;__|    \___  &gt;___  &gt;____ |\___  &gt;____  &gt; /_______  / /\ \____|__  / /\  \____|__  /____|   |___|     Version: 1.1
         \/      \/        \/     \/            \/    \/     \/    \/     \/          \/  \/         \/  \/          \/              </pre>
         <div>
-            <p>&nbsp;<strong>-</strong><strong> API FUNCIONANDO CORRECTAMENTE -</strong><strong><br /><br /></strong><strong>Endpoints:</strong></p>
+            <p>&nbsp;<strong>-</strong><strong> API FUNCIONANDO CORRECTAMENTE
+                    -</strong><strong><br /><br /></strong><strong>Endpoints:</strong></p>
             <p><strong>Productos</strong></p>
-            <p><em>GET "/productos/traer"</em>: Devuelve el total de productos en la BD<br /><em>POST "/productos/crear"</em>: Permite crear de a un producto a la vez<br /><em>POST "/productos/batch"</em>: Permite crear productos en base a un array<br /><em>DELETE "productos/borrar/{id}"</em>: Permite eliminar un producto indicando su ID<br /><em>PUT "productos/editar/{id}"</em>: Permite editar un productos indicando su ID<br /><em>PUT "productos/actualizar/stock"</em>: Permite actualizar los stock de todo<br /><em>PUT "productos/actualizar/precio"</em>: Permite actualizar los precios de todo</p>
+            <p><em>GET "/productos/traer"</em>: Devuelve el total de productos en la BD<br /><em>POST
+                    "/productos/crear"</em>: Permite crear de a un producto a la vez<br /><em>POST
+                    "/productos/batch"</em>:
+                Permite crear productos en base a un array<br /><em>DELETE "productos/borrar/{id}"</em>: Permite
+                eliminar
+                un producto indicando su ID<br /><em>PUT "productos/editar/{id}"</em>: Permite editar un productos
+                indicando su ID<br /><em>PUT "productos/actualizar/stock"</em>: Permite actualizar los stock de
+                todo<br /><em>PUT
+                    "productos/actualizar/precio"</em>: Permite actualizar los precios de todo</p>
             <p><strong>Publicaciones Mercadolibre</strong></p>
-            <p><em>POST "/ml/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br /><em>GET "/ml/traer"</em>: Devuelve el total de publicaciones en la BD<br /><em>POST "/ml/batch"</em>: Permite crear publicaciones en base a un array<br /><em>DELETE "/ml/borrar/{id}"</em>: Permite eliminar una publicaci&oacute;n indicando su ID<br /><em>PUT "/ml/editar/{id}"</em>: Permite editar una publicaci&oacute;n indicando su ID</p>
+            <p><em>POST "/ml/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br /><em>GET
+                    "/ml/traer"</em>: Devuelve el total de publicaciones en la BD<br /><em>POST "/ml/batch"</em>:
+                Permite
+                crear publicaciones en base a un array<br /><em>DELETE "/ml/borrar/{id}"</em>: Permite eliminar una
+                publicaci&oacute;n indicando su ID<br /><em>PUT "/ml/editar/{id}"</em>: Permite editar una
+                publicaci&oacute;n
+                indicando su ID</p>
             <p><strong>Publicaciones pagina WEB</strong></p>
-            <p><em>POST "/web/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br /><em>GET "/web/traer"</em>: Devuelve el total de publicaciones en la BD<br /><em>POST "/web/batch"</em>: Permite crear publicaciones en base a un array<br /><em>DELETE "/web/borrar/{id}"</em>: Permite eliminar una publicaci&oacute;n indicando su ID<br /><em>PUT "/web/editar/{id}"</em>: Permite editar una publicaci&oacute;n indicando su ID</p>
+            <p><em>POST "/web/crear"</em>: Permite crear de a una publicaci&oacute;n a la vez<br /><em>GET
+                    "/web/traer"</em>: Devuelve el total de publicaciones en la BD<br /><em>POST "/web/batch"</em>:
+                Permite
+                crear publicaciones en base a un array<br /><em>DELETE "/web/borrar/{id}"</em>: Permite eliminar una
+                publicaci&oacute;n indicando su ID<br /><em>PUT "/web/editar/{id}"</em>: Permite editar una
+                publicaci&oacute;n
+                indicando su ID</p>
             <p>&nbsp;</p>
-            <p>Repositorio:&nbsp;<a href="https://github.com/Vassa94/ML-APP-API" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/Vassa94/ML-APP-API" target="_blank" rel="noopener"></a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<em>Dessarrollado por Ignacio Vassallo</em> </p>
+            <p>Repositorio:&nbsp;<a href="https://github.com/Vassa94/ML-APP-API" target="_blank"
+                    rel="noopener">GitHub</a><a href="https://github.com/Vassa94/ML-APP-API" target="_blank"
+                    rel="noopener"></a> &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<em>Dessarrollado por Ignacio Vassallo</em></p>
         </div>
     </div>
 </div>
 
-</html>
+</html> -->
