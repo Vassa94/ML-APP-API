@@ -14,23 +14,23 @@ public class PublicacionMlService implements IPublicacionMlService {
     private PublicacionMlRepository publicacionMlRepository;
 
     @Override
-    public List<PublicacionMl> getPublicacionMl(){
-        List<PublicacionMl> ListaPublicacionMl=publicacionMlRepository.findAll();
+    public List<PublicacionMl> getPublicacionMl() {
+        List<PublicacionMl> ListaPublicacionMl = publicacionMlRepository.findAll();
         return ListaPublicacionMl;
     }
 
     @Override
-    public void savePublicacionMl(PublicacionMl publicacionMl){
+    public void savePublicacionMl(PublicacionMl publicacionMl) {
         publicacionMlRepository.save(publicacionMl);
     }
 
     @Override
-    public void deletePublicacionMl(Long id){
+    public void deletePublicacionMl(String id) {
         publicacionMlRepository.deleteById(id);
     }
 
     @Override
-    public PublicacionMl findPublicacionMl(Long id){
+    public PublicacionMl findPublicacionMl(String id) {
         PublicacionMl publicacionMl = publicacionMlRepository.findById(id).orElse(null);
         return publicacionMl;
     }
