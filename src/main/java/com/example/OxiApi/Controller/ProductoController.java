@@ -25,7 +25,7 @@ public class ProductoController {
     @Autowired
     private IProductoService interProducto;
 
-    @GetMapping("/producto/traer")
+    @GetMapping("/productos/traer")
     public List<Producto> getProductos() {
         List<Producto> productos = interProducto.getProductos();
 
@@ -34,10 +34,6 @@ public class ProductoController {
 
         return productos;
     }
-
-    /*
-    @GetMapping("/producto/traer")
-    public List<Producto> getProductos() {return interProducto.getProductos(); }*/
 
     @GetMapping("/")
     public ModelAndView status() {
@@ -81,19 +77,11 @@ public class ProductoController {
         return "Los productos fueron creados exitosamente";
     }
 
-
-    /**
-     * Elimina un producto de la base de datos.
-     */
     @DeleteMapping("productos/borrar/{id}")
     public String deleteProducto(@PathVariable Long id) {
         interProducto.deleteProducto(id);
         return "El producto con codigo " + id + " fue borrado correctamente";
     }
-
-
-    // Esta función recibe la identificación de un producto y los nuevos valores para los atributos del producto, y luego
-    // actualiza el producto en la base de datos con los nuevos valores.
 
     @PutMapping("productos/editar/{id}")
     @RequestMapping(value = "productos/editar/{id}", method = {RequestMethod.GET, RequestMethod.PUT})
